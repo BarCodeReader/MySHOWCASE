@@ -218,6 +218,22 @@ hr {
   margin: 2em 0; }
   hr.major {
     margin: 3em 0; }
+.column-list {
+  display: flex;
+  justify-content: space-between;
+}
+
+.column {
+  padding: 0 1em;
+}
+
+.column:first-child {
+  padding-left: 0;
+}
+
+.column:last-child {
+  padding-right: 0;
+}
 
 .align-left {
   text-align: left; }
@@ -1863,6 +1879,7 @@ button,
       border-top: solid 2px rgba(210, 215, 217, 0.75); }
       #main > .inner > section:first-of-type {
         border-top: 0 !important; }
+
   @media screen and (max-width: 1680px) {
     #main > .inner {
       padding: 0 5em 0.1em 5em ; }
