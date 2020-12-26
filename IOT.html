@@ -1,0 +1,186 @@
+<!DOCTYPE HTML>
+<!--
+	Editorial by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>MySHOWCASE</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Main -->
+					<div id="main">
+						<div class="inner">
+
+							<!-- Header -->
+								<header id="header">
+									<a href="index.html" class="logo">Hi, I'm Yi Ke, this is my <strong>SHOWCASE</strong></a>
+									<ul class="icons">
+										<li><a target="_blank" rel="noopener noreferrer" href="https://www.linkedin.com/in/yunyike/" class="fab fa-linkedin-in"><span class="label"></span></a></li>
+										<li><a target="_blank" rel="noopener noreferrer" href="https://github.com/BarCodeReader" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
+									</ul>
+								</header>
+
+							<!-- Content -->
+								<section>
+									<header class="main">
+										<h1>IOT for Workstation Remote Control</h1>
+										<h2>Finally, I combined AI & IOT with hardware.</h2>
+									</header>
+
+									<p>Due to Covid-19, we have to work from home, and as a Machine Learning Engineer, I need to conduct trainings remotely on our workstations. Since so many people need to use it, the workstation is becoming less and less stable and once it shuts down, we need to be physically in front of it, just to press the reboot button.</p>
+									<p>As a ML & AI engineer with mechatronics background, I refuse to become the slave of our workstation; and thus I decide to implement an IOT system to remote control.</p>
+
+
+									<span class="image main"><img src="IOT/image1.png" alt="" /></span>
+
+									<hr class="major" />
+
+									<h2>System Overview</h2>
+									<h3>How is this even possible?</h3>
+									<p>When I say I want to remote control the workstation, you may wonder: if the system is already down, how can you reboot it remotely? Well, I am not going to remote control it via software, I am going to design the system to press the reboot button. <strong>Yes, I really mean press that button.</strong></p>
+									<p>So are we going to design a robot arm or something moving? No. Robot arm is an overkill and itself takes too much effort to design and maintain. If you decide to use a robot arm as your solution, then you are not a good mechatronics engineer for sure.&nbsp&nbsp:)</p>
+									<p>If we think about it, why we press that reboot/shutdown button, computer will reboot/shutdown? The button there is just a switch and when we press it, the circuit shorts and thus machine can reboot/shutdown. <strong>Thus we only need to design a circuit to mimic the action of pressing button, we are able to control the whole system</strong>. This solution is simple to implement and easy to maintain. (Because I am professional.)</p>
+
+									<h3>What we need</h3>
+									<p>What we need is very simple, just a Raspberry Pi, 2 of 3.3V relay and bunch of wires.</p>
+									<div id="8b2cc9f4-124b-43e5-a76c-76b7481778d3" class="column-list">
+										<div id="df538aa4-8993-4a9f-bb6b-0dbf7e20cc77" style="max-width: 500px" class="column">
+											<figure id="fbddb0b9-f0db-4cac-89ba-cd47b1d335e8" class="image">
+												<a href="IOT/image3.png">
+													<img style="max-width:50%;" src="IOT/image3.png"/>
+												</a>
+												<figcaption><strong>Raspberry Pi</strong></figcaption>
+											</figure>
+										</div>
+										<div>
+											<figure id="46ad9673-fb82-4f3a-986b-bec964821ab5" class="image">
+												<a href="IOT/image2.png">
+													<img style="max-width: 50%;" src="IOT/image2.png"/>
+												</a>
+												<figcaption><strong>Relay</strong></figcaption>
+											</figure>
+										</div>
+									</div>
+									<p>Then we are about to design our own IOT system.</p>
+
+									<h3>System graph</h3>
+									<p>We are going to use a broadcasting service called MQTT, one can regard this as a cloud messager. We will send messages from our local device, like PC or iPhone, to the broker, then broker will forward the messages to our Raspberry Pi. Once Raspberry receives message, it will decode the message and generate corresponding voltage and current to activate the circuit we designed to control the workstation. This is the big picture of our IOT system.</p>
+									<span class="image main"><img src="IOT/image4.png" alt="" /></span>
+									<h3>Cloud side</h3>
+									<p>Firstly, we need to setup a cloud page for our user to generate control commands. A web page like below is very simple to create in Flask and host on cloud.</p>
+									<span class="image main"><img style="max-width:70%;" src="IOT/image5.png" alt="" /></span>
+									<p>Then we just need to send messages from this web page to a topic on broker, for example "workstation_control", and on our Raspberry Pi, we need to subscribe to the topic we created just now so that we can receive messages from cloud. As you can see from below, once we sent the message, Raspberry Pi will immediately receives it and show in the terminal at the bottom.</p>
+									<iframe width="560" height="315" src="https://www.youtube.com/embed/8DZycWxr3RA" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+									<p>Now we finished the data pipeline on cloud side, and we move to circuit design.</p>
+									<h3>Circuit design</h3>
+									<p>It's very simple to design the circuit, if you know why your PC will reboot after you press the button. We just need to use the relay as another switch and connect in parallel with the workstation button.</p>
+									<span class="image main"><img style="max-width:80%;" src="IOT/image6.png" alt="" /></span>
+
+									<h2>Dry Run & Simulation</h2>
+									<p>When Raspberry Pi receives signal from cloud, it will generate a 3.3V signal and thus the relay, which is an electric-magnetic switch, will be closed and the circuit for workstation will short and thus it reboots. The same principle applies to the shutdown button, the only difference is for shutdown, we need to press 4-5 seconds which can be easily controlled by Raspberry Pi.</p>
+
+									<p>For "shutdown", the blue LED will on for 5 seconds, then off, simulating the shutdown action.</p>
+									<div id="8b2cc9f4-124b-43e5-a76c-76b7481778d3" class="column-list">
+										<div id="df538aa4-8993-4a9f-bb6b-0dbf7e20cc77" style="max-width: 500px" class="column">
+											<iframe width="560" height="315" src="https://www.youtube.com/embed/L3MbsipGQ8I" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+										</div>
+									</div>
+									<p>For "boot up", the blue LED will on for 1 seconds, then off, simulating the boot action.</p>
+									<div id="8b2cc9f4-124b-43e5-a76c-76b7481778d3" class="column-list">
+										<div id="df538aa4-8993-4a9f-bb6b-0dbf7e20cc77" style="max-width: 500px" class="column">
+											<iframe width="560" height="315" src="https://www.youtube.com/embed/yFGvq8CZk6o" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+										</div>
+									</div>
+									<p>For "restart", the green LED will on for 1 seconds, then off, simulating the restart action.</p>
+									<div id="8b2cc9f4-124b-43e5-a76c-76b7481778d3" class="column-list">
+										<div>
+											<iframe width="560" height="315" src="https://www.youtube.com/embed/Kb0M6Fj5pE0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+										</div>
+									</div>
+
+									<h3>The Deploy</h3>
+									<p>Okay, enough demo, lets just connect all these things into our workstation motherboard and play with the system!</p>
+									<iframe width="560" height="315" src="https://www.youtube.com/embed/vhMzyc64S7E" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+									<p>The controller just works as designed and everything looks smooth! YEAH! now we are no more slaves of the workstation and can control it from home!</p>
+
+									<h2>What's Next</h2>
+									<p>You might already feel, that we can add more advanced functions to this platform. We can soon have face recognition system, voice recognition system, voice awaken system and ... sky is the limit.</p>
+									<p>Though this project is not big and its function is very specific, I learnt a lot from it and now I am more confident about myself for our intelligent future.</p>
+
+
+
+
+
+									<hr id="2e4c7c87-ddf8-439d-8347-ff68c9dc223a"/>
+									<p id="beaf9483-c613-4041-b3fd-41fe929afe82" class=""></p>
+								</section>
+
+						</div>
+					</div>
+
+				<!-- Sidebar -->
+					<div id="sidebar">
+						<div class="inner">
+
+							<!-- Search -->
+								<section id="search" class="alt">
+									<form method="post" action="#">
+										<input type="text" name="query" id="query" placeholder="Search" />
+									</form>
+								</section>
+
+							<!-- Menu -->
+								<nav id="menu">
+									<header class="major">
+										<a href="index.html"><h2>MySHOWCASE</h2></a>
+									</header>
+									<ul>
+										<li>
+											<span class="opener">Projects</span>
+											<ul>
+												<li><a href="CapNet.html">CapNet</a></li>
+												<li><a href="AnimRecom.html">Animation Recommendation</a></li>
+												<li><a href="AI_toolkit.html">AI Toolkit</a></li>
+												<li><a href="DeepRacer.html">Autonomous AI</a></li>
+												<li><a href="IOT.html">IOT under COVID-19</a></li>
+											</ul>
+										</li>
+									</ul>
+								</nav>
+							<!-- Section -->
+								<section>
+									<header class="major">
+										<h2>Get in touch</h2>
+									</header>
+									<ul class="contact">
+										<li class="icon solid fa-envelope"><a href="#">yunyikeyyk@gmail.com</a></li>
+										<li class="icon solid fa-phone">+65 8818 5997</li>
+										<li><a target="_blank" rel="noopener noreferrer" href="https://www.linkedin.com/in/yunyike/" class="fab fa-linkedin-in"><span class="label"></span></a>&nbsp&nbsp
+											<a target="_blank" rel="noopener noreferrer" href="https://github.com/BarCodeReader" class="icon brands fa-github"><span class="label">GitHub</span></a>
+										</li>
+									</ul>
+								</section>
+
+						</div>
+					</div>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>

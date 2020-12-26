@@ -1,0 +1,187 @@
+<!DOCTYPE HTML>
+<!--
+	Editorial by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>MySHOWCASE</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Main -->
+					<div id="main">
+						<div class="inner">
+
+							<!-- Header -->
+								<header id="header">
+									<a href="index.html" class="logo">Hi, I'm Yi Ke, this is my <strong>SHOWCASE</strong></a>
+									<ul class="icons">
+										<li><a target="_blank" rel="noopener noreferrer" href="https://www.linkedin.com/in/yunyike/" class="fab fa-linkedin-in"><span class="label"></span></a></li>
+										<li><a target="_blank" rel="noopener noreferrer" href="https://github.com/BarCodeReader" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
+									</ul>
+								</header>
+
+							<!-- Content -->
+								<section>
+									<header class="main">
+										<h1>Autonomous AI</h1>
+										<h2>AWS DeepRacer Challenge, May 2020</h2>
+									</header>
+
+									<p>Together with another colleague, I participated in a <strong>Reinforcement Learning</strong> challenge hosted by Amazon. During the event, we have 1 month to design, implement and train our AWS DeepRacer on cloud and submit our best scores.</p>
+
+									<ul>
+										<strong>F1 ProAm Event - May Qualifier</strong>
+										<li>Object Avoidance: 9th/134</li>
+										<li>Time Trial: 41th/1291</li>
+										<li>Head-to-head: 34th/202</li>
+										<strong>Americas and Asia-Pacific - May Qualifier</strong>
+										<li>Time Trial: 66th/330</li>
+										<li>Head-to-head: 61th/151</li>
+									</ul>
+
+									<span class="image main"><img src="images/pic12_3.png" alt="" /></span>
+
+									<hr class="major" />
+
+									<h2>The Journey to the Finish Line</h2>
+									<h3>What is AWS DeepRacer?</h3>
+									<p>It is a miniature racing car that is 1/18th of a real car in term of scale[1]. Furthermore, it comes with different type of cameras and sensors that enable autonomous driving. Following are the available sensors (image courtesy of Amazon Web Service):</p>
+									<img width="500" src="DeepRacer/image1.png"/>
+									<p>The sensors sample rate is 15 Hz (15 samples per second). Beside the sensors, the car itself can run up to 4 m/s with maximum steering angle of 30 degrees.</p>
+
+									<h3>What is reinforcement learning?</h3>
+									<p>Reinforcement learning is a type of machine learning that is capable of planning and decision making. It is one of the big field of research in AI, if you want to know more about it from the ground up, I recommend the book called Reinforcement Learning: An Introduction[2]. Below is a diagram showing a general reinforcement learning schema:</p>
+									<img width="500" src="DeepRacer/image2.png"/>
+
+									<p>Our agent here is the DeepRacer car. Environment is the actual racing track. Our agent percepts or sees the environment through its sensors, this perception becomes the state of the agent. Then it will perform actions based on its internal set of rules (or model).</p>
+									<p>The motivation for the model to try to perform better is based on the reward. The model can be a deep learning neural network, trying to approximate the best policy. A policy is a function that map the state and action with highest possible rewards. For example, the rewards can simply be finishing the track, then the policy (agent/model) that manage to finish the track will be awarded higher rewards.</p>
+									<p>For our current problem, the actions are discrete and separated into 2 groups: steering angle and speed. Steering angle range is 1 - 30 degrees with granularity options 3, 5 or 7. Speed range is 0.1 - 4 ms with granularity options 1, 2, 3. Number of actions is based on granularity only. For example with steering granularity of 3 and speed granularity of 2 will results in total of 3 * 2 = 6 actions.</p>
+									<p>To actually approximate the best policy, AWS uses PPO (Proximal Policy Optimization)[3,4] method to train the DeepRacer. The underlying neural network is a simple n-layer convolution neural network (CNN). n here can be 3 or 5 in our case.</p>
+									<p>There are a few parameters we received during training that can be used to calculate the reward functions:</p>
+									<img width="500" src="DeepRacer/image3.png"/>
+
+									<h3>Race Type</h3>
+									<p>This race is done entirely online in the virtual circuit. This is our race track, called Circuit de Barcelona-Catalunya, which is the reproduction of the official F1 Spanish Grand Prix track. We also do a time-trial focus on this track, called The 2019 DeepRacer Championship Cup:</p>
+									<div id="8b2cc9f4-124b-43e5-a76c-76b7481778d3" class="column-list">
+										<div id="df538aa4-8993-4a9f-bb6b-0dbf7e20cc77" style="max-width: 500px" class="column">
+											<figure id="fbddb0b9-f0db-4cac-89ba-cd47b1d335e8" class="image">
+												<a href="DeepRacer/image4.png">
+													<img style="max-width:100%;" src="DeepRacer/image4.png"/>
+												</a>
+												<figcaption><strong>F1 Race Track</strong></figcaption>
+											</figure>
+										</div>
+										<div id="3d5be5fc-bcc0-4f2c-a150-53fc489c47a5" style="max-width: 300px" class="column">
+											<figure id="46ad9673-fb82-4f3a-986b-bec964821ab5" class="image">
+												<a href="DeepRacer/image5.png">
+													<img style="max-width: 100%;" src="DeepRacer/image5.png"/>
+												</a>
+												<figcaption><strong>Time Trial Track</strong></figcaption>
+											</figure>
+										</div>
+									</div>
+
+									<h3>Calculating The Optimal Path - Using Neural Networks</h3>
+									<p>The 2019 track also saw many increments. We obtained the optimum path[5,6] by assigning each waypoint a neuron and the sum of distance between each neuron as the loss function to let them converge (minimize the loss). Below was the optimum path for this track after 20K epochs, which was also the shortest path ever possible(the blue line). Now the agent only needed to learn to drive closer and closer to the optimum while remain fast. There were some other algorithms that calculated optimum racing line differently, but here we used the shortest path as our optimum. Below was our calculated optimum path (blue dots) for the 2019 track:</p>
+									<img width="500" src="DeepRacer/image6.png"/>
+									<p>The optimum path(blue) calculated for the race track</p>
+
+									<h3>The Training and The Results</h3>
+									<p>For F1 Track, we train the model by setting speed and total time used as the reward function, while for Time Trial, besides the speed and total time, we also set the different between actual path and optimal path as a reward function to help the agent converge to shortest path.</p>
+									<p>Below are the final results we obtained and submitted for this challenge.</p>
+									<h3>Optimal Track</h3>
+									<div id="cca3e10d-3548-4127-b3f4-eab8e220c393" class="column-list">
+										<div id="1c0a3240-790f-4fda-848a-a79d01627819" style="width:50%" class="column">
+											<iframe width="560" height="315" src="https://www.youtube.com/embed/0hEUCStq_yg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+										</div>
+									</div>
+									<h3>Obstacle Avoid</h3>
+									<div id="cca3e10d-3548-4127-b3f4-eab8e220c393" class="column-list">
+										<div id="1c0a3240-790f-4fda-848a-a79d01627819" style="width:50%" class="column">
+											<iframe width="560" height="315" src="https://www.youtube.com/embed/42v3r1TJ13w" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+										</div>
+									</div>
+									<hr id="2e4c7c87-ddf8-439d-8347-ff68c9dc223a"/>
+
+									<h3>References</h3>
+									<ul>
+										<li>[1] Amazon. (2020). Retrieved from https://aws.amazon.com/deepracer/</li>
+										<li>[2] Sutton, R. S., & Barto, A. G. (2011). Reinforcement learning: An introduction. Retrieved from https://web.stanford.edu/class/psych209/Readings/SuttonBartoIPRLBook2ndEd.pdf</li>
+										<li>[3] Schulman, J., Wolski, F., Dhariwal, P., Radford, A., & Klimov, O. (2017). Proximal policy optimization algorithms. arXiv preprint arXiv:1707.06347. Retrieved from https://arxiv.org/abs/1707.06347</li>
+										<li>[4] Schulman, J., Wolski, F., Dhariwal, P., Radford, A., & Klimov, O. (2017a). Proximal Policy Optimization. Retrieved from https://openai.com/blog/openai-baselines-ppo/#ppo</li>
+										<li>[5] Xiong, Y. (2010). Racing line optimization. Massachusetts Institute of Technology</li>
+										<li>[6] Vesel, R. (2015). Racing line optimization@ race optimal. ACM SIGEVOlution, 7(2-3), 12-20.</li>
+									</ul>
+									<hr id="2e4c7c87-ddf8-439d-8347-ff68c9dc223a"/>
+									<p id="beaf9483-c613-4041-b3fd-41fe929afe82" class=""></p>
+								</section>
+
+						</div>
+					</div>
+
+				<!-- Sidebar -->
+					<div id="sidebar">
+						<div class="inner">
+
+							<!-- Search -->
+								<section id="search" class="alt">
+									<form method="post" action="#">
+										<input type="text" name="query" id="query" placeholder="Search" />
+									</form>
+								</section>
+
+							<!-- Menu -->
+								<nav id="menu">
+									<header class="major">
+										<a href="index.html"><h2>MySHOWCASE</h2></a>
+									</header>
+									<ul>
+										<li>
+											<span class="opener">Projects</span>
+											<ul>
+												<li><a href="CapNet.html">CapNet</a></li>
+												<li><a href="AnimRecom.html">Animation Recommendation</a></li>
+												<li><a href="AI_toolkit.html">AI Toolkit</a></li>
+												<li><a href="DeepRacer.html">Autonomous AI</a></li>
+												<li><a href="IOT.html">IOT under COVID-19</a></li>
+											</ul>
+										</li>
+									</ul>
+								</nav>
+							<!-- Section -->
+								<section>
+									<header class="major">
+										<h2>Get in touch</h2>
+									</header>
+									<ul class="contact">
+										<li class="icon solid fa-envelope"><a href="#">yunyikeyyk@gmail.com</a></li>
+										<li class="icon solid fa-phone">+65 8818 5997</li>
+										<li><a target="_blank" rel="noopener noreferrer" href="https://www.linkedin.com/in/yunyike/" class="fab fa-linkedin-in"><span class="label"></span></a>&nbsp&nbsp
+											<a target="_blank" rel="noopener noreferrer" href="https://github.com/BarCodeReader" class="icon brands fa-github"><span class="label">GitHub</span></a>
+										</li>
+									</ul>
+								</section>
+
+						</div>
+					</div>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>
