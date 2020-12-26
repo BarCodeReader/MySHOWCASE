@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
+<!--[if lt IE 7 ]> <html class="ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]>    <html class="ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]>    <html class="lt-ie9" lang="en"> <![endif]-->
+<!--[if IE 9 ]>    <html class="lt-ie10" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--> <html lang="en"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>twentytwenty</title>
+  <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+  <link href="css/foundation.css" rel="stylesheet" type="text/css" />
+  <link href="css/twentytwenty.css" rel="stylesheet" type="text/css" />
+  <title>Visualization</title>
+</head>
+  <body>
+    <nav class="navbar navbar-dark navbar-expand-sm fixed-top">
+        <div class="container">
+            <div class="collapse navbar-collapse" id="Navbar">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item"><a class="nav-link" href='#BGRemoval'>Background Removal</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#BGChange">Background Change</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#OBJRE">Object Removal</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#PARALX">Parallex</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#BOKEH">Bokeh</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#SELSAL">Selective Saliency</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#DExp">Double Exposure</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#SR">Super Resolution</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#ANIM">Animation Recommendation</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#CAP">Caption Positioning</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#CTE">Contrast Enhancement</a></li>
+                </ul> 
+            </div>           
+        </div>
+    </nav>
+
+    <container>
+    <div class="row" style="margin-top: 2em;" id='BGRemoval'>
+<br>
+<br>
+<br>
+      <div class="large-12 columns">
+        <h1><strong>Background Removal</strong></h1>
+      </div>
+      <div class="large-4 columns">
+        <h3><strong>How it works</strong></h3>
+        <p>By applying Saliency Object Detection model, we can obtain the prediction mask of that saliency object.</p>
+        <p>A threshold is applied to the mask in order to further improve the prediction accuracy</p>
+        <p>Applying the mask on original image, we can extract the object and achieve backtround removal function</p>
+      </div>
+      <div class="large-8 columns">
+        <div>
+          <img src="img_BGRemoval/HowItWorks.png" />
+        </div>
+      </div>
+      <div class="large-4 columns">
+        <h3><strong>Demonstration</strong></h3>
+        <p>By applying Saliency Object Detection, we can perform <strong>Background Removal</strong> function on client's image.</p>
+      </div>
+
+      <div class="large-8 columns">
+        <div class="twentytwenty-container">
+          <img src="img_BGRemoval/output.png" />
+          <img src="img_BGRemoval/image.png" />
+        </div>
+      </div>
+    </div>
+
+    <div class="row" style="margin-top: 2em;" id='BGChange'>
+<br>
+<br>
+<br>
+      <div class="large-12 columns">
+        <h1><strong>Background Change</strong></h1>
+      </div>
+        <div class="large-4 columns">
+          <h3><strong>How it works</strong></h3>
+          <p>By applying Saliency Object Detection model, we can obtain the prediction mask of that saliency object.</p>
+          <p>A threshold is applied to the mask in order to further improve the prediction accuracy</p>
+          <p>Prepare Image2 as the new background</p>
+          <p>Applying the mask on original image and new background, we can achieve backtround change function</p>
+        </div>
+        <div class="large-8 columns">
+          <div>
+            <img src="img_BGChange/HowItWorks.png" />
+          </div>
+        </div>
+        <div class="large-4 columns">
+          <h3><strong>Demonstration</strong></h3>
+          <p>By applying Saliency Object Detection, we can perform <strong>Background Removal</strong> function on client's image.</p>
+        </div>
+
+        <div class="large-8 columns">
+          <div class="twentytwenty-container">
+            <img src="img_BGChange/output.png" />
+            <img src="img_BGChange/image.png" />
+          </div>
+        </div>
+    </div>
+
+
+    <div class="row" style="margin-top: 2em;" id='OBJRE'>
+<br>
+<br>
+<br>
+      <div class="large-12 columns">
+        <h1><strong>Object Removal</strong></h1>
+      </div>
+        <div class="large-4 columns">
+          <h3><strong>How it works</strong></h3>
+          <p>User can specify areas where they want to remove the object, and thus a mask is obtained</p>
+          <p>Feed the mask and the maksed image into Image Inpainting model, we can achieve Object Removal function</p>
+          <p>Use can choose to either use Saliency Object as the mask or they manually draw a box on the image</p>
+        </div>
+        <div class="large-8 columns">
+          <div>
+            <img src="img_ObjRemove/HowItWorks.png" />
+          </div>
+          <div>
+            <img src="img_ObjRemove/HowItWorks4.png" />
+          </div>
+        </div>
+        <div class="large-4 columns">
+          <h3><strong>Demonstration</strong></h3>
+          <p>By applying Image Inpainting, we can perform <strong>Object Removal</strong> function on client's image.</p>
+        </div>
+
+        <div class="large-8 columns">
+          <div class="twentytwenty-container">
+            <img src="img_ObjRemove/output.png" />
+            <img src="img_ObjRemove/image.png" />
+          </div>
+          <div class="twentytwenty-container">
+            <img src="img_ObjRemove/output4.png" />
+            <img src="img_ObjRemove/image4.png" />
+          </div>
+        </div>
+    </div>
+
+
+
+    <div class="row" style="margin-top: 2em;" id='PARALX'>
+<br>
+<br>
+<br>
+      <div class="large-12 columns">
+        <h1><strong>Parallex</strong></h1>
+      </div>
+        <div class="large-4 columns">
+          <h3><strong>How it works</strong></h3>
+          <p>Apply Saliency Object detection for object extraction</p>
+          <p>Apply Image Inpainting mode to fill the background</p>
+          <p>By adjusting the movement and scale of the object and background, we can achieve Parallex effect</p>
+        </div>
+        <div class="large-8 columns">
+          <div>
+            <img src="img_Parallex/HowItWorks.png" />
+          </div>
+        </div>
+        <div class="large-4 columns">
+          <h3><strong>Demonstration</strong></h3>
+          <p>By applying Saliency Object detection and Image Inpainting, we can perform <strong>Parallex</strong> function on client's image.</p>
+        </div>
+
+        <div class="large-8 columns">
+          <img src="img_Parallex/animation.gif" />
+        </div>
+
+    </div>
+
+
+
+    <div class="row" style="margin-top: 2em;" id='BOKEH'>
+<br>
+<br>
+<br>
+      <div class="large-12 columns">
+        <h1><strong>Bokeh</strong></h1>
+      </div>
+        <div class="large-4 columns">
+          <h3><strong>How it works</strong></h3>
+          <p>By applying Saliency Object Detection model, we can obtain the prediction mask of that saliency object.</p>
+          <p>A threshold is applied to the mask in order to further improve the prediction accuracy</p>
+          <p>Background image is then blured by applying pre-defined kernel</p>
+          <p>Applying the mask on original image and new background, we can achieve Bokeh effect</p>
+        </div>
+        <div class="large-8 columns">
+          <div>
+            <img src="img_Bokeh/HowItWorks.png" />
+          </div>
+        </div>
+        <div class="large-4 columns">
+          <h3><strong>Demonstration</strong></h3>
+          <p>By applying Saliency Object Detection, we can perform <strong>Bokeh</strong> function on client's image.</p>
+        </div>
+
+        <div class="large-8 columns">
+          <div class="twentytwenty-container">
+            <img src="img_Bokeh/output.png" />
+            <img src="img_Bokeh/image.png" />
+          </div>
+        </div>
+    </div>
+
+
+    <div class="row" style="margin-top: 2em;" id='SELSAL'>
+<br>
+<br>
+<br>
+      <div class="large-12 columns">
+        <h1><strong>Selective Saliency</strong></h1>
+      </div>
+        <div class="large-4 columns">
+          <h3><strong>How it works</strong></h3>
+          <p>We can apply saliency model to a particular region in order to provide more freedom to users</p>
+          <p>A threshold is applied to the mask in order to further improve the prediction accuracy</p>
+          <p>Color can be changed for that specific area</p>
+          <p>Specific Object can be extracted based on users selection</p>
+        </div>
+        <div class="large-8 columns">
+          <div>
+            <img src="img_SELSAL/HowItWorks.png" />
+          </div>
+        </div>
+        <div class="large-4 columns">
+        </div>
+        <div class="large-8 columns">
+          <div>
+            <img src="img_SELSAL/HowItWorks2.png" />
+          </div>
+        </div>
+        <div class="large-4 columns">
+          <h3><strong>Demonstration</strong></h3>
+          <p>By applying Saliency Object Detection on certain area, we can perform <strong>Selective Saliency</strong> function on client's image.</p>
+        </div>
+
+        <div class="large-8 columns">
+          <div class="twentytwenty-container">
+            <img src="img_SELSAL/output.png" />
+            <img src="img_SELSAL/image.png" />
+          </div>
+        </div>
+        <div class="large-4 columns">
+        </div>
+        <div class="large-8 columns">
+          <div class="twentytwenty-container">
+            <img src="img_SELSAL/output2.png" />
+            <img src="img_SELSAL/image2.png" />
+          </div>
+        </div>
+    </div>
+
+
+
+    <div class="row" style="margin-top: 2em;" id='DExp'>
+<br>
+<br>
+<br>
+      <div class="large-12 columns">
+        <h1><strong>Double Exposure</strong></h1>
+      </div>
+        <div class="large-4 columns">
+          <h3><strong>How it works</strong></h3>
+          <p>By applying Saliency Object Detection model, we can obtain the prediction mask of that saliency object.</p>
+          <p>A threshold is applied to the mask in order to further improve the prediction accuracy</p>
+          <p>Prepare Image2 and Image 3 for blending</p>
+          <p>Applying the mask on original image, we can blend Image2 and Image3 together and achieve Double Exposure effct.</p>
+        </div>
+        <div class="large-8 columns">
+          <div>
+            <img src="img_DExp/HowItWorks.png" />
+          </div>
+        </div>
+        <div class="large-4 columns">
+          <h3><strong>Demonstration</strong></h3>
+          <p>By applying Saliency Object Detection, we can perform <strong>Double Exposure</strong> function on client's image.</p>
+        </div>
+
+        <div class="large-8 columns">
+          <div class="twentytwenty-container">
+            <img src="img_DExp/output.png" />
+            <img src="img_DExp/image.png" />
+          </div>
+        </div>
+    </div>
+
+
+
+
+    <div class="row" style="margin-top: 2em;" id='SR'>
+<br>
+<br>
+<br>
+      <div class="large-12 columns">
+        <h1><strong>Super Resolution</strong></h1>
+      </div>
+        <div class="large-4 columns">
+          <h3><strong>Demonstration</strong></h3>
+          <p>By applying Super Resolution model, we can improve low resolution image quality.</p>
+          <p>A low resolution image is needed for the model</p>
+          <p>High resolution image can be generated based on the scale factor chosen (X2,X3,X4, etc.)</p>
+          <p>Example shown at scale <strong>X4</strong></p>
+        </div>
+
+        <div class="large-8 columns">
+          <div class="twentytwenty-container">
+            <img src="img_SR/output.png" />
+            <img src="img_SR/image.png" />
+          </div>
+        </div>
+    </div>
+
+
+
+    <div class="row" style="margin-top: 2em;" id='ANIM'>
+<br>
+<br>
+<br>
+      <div class="large-12 columns">
+        <h1><strong>Animation Recommendation</strong></h1>
+      </div>
+      <div class="large-4 columns">
+        <h3><strong>How it works</strong></h3>
+        <p>By applying Saliency Object and Saliency Map model, we can generate a Hybrid Saliency Map</p>
+        <p>The hybrid saliency map served as a "foreground-background map with attention"</p>
+        <p>Based on the hybrid saliency map and pre-defined algorithm, we can generate animation suggestions</p>
+      </div>
+      <div class="large-8 columns">
+        <div>
+          <img src="img_Anime/HowItWorks.png" />
+        </div>
+      </div>
+      <div class="large-4 columns">
+        <h3><strong>Demonstration</strong></h3>
+        <p>By applying Saliency Object and Saliency Map model, we can perform <strong>Animation Recommendation</strong> function on client's image.</p>
+      </div>
+
+      <div class="large-4 columns">
+        <div>
+          <img src="img_Anime/image.png" />
+        </div>
+      </div>
+      <div class="large-4 columns">
+        <div>
+          <img src="img_Anime/output.gif" />
+          <p>&nbsp&nbsp&nbsp&nbsp&nbspRecommended Animation: Move Down</p>
+        </div>
+      </div>
+    </div>
+
+
+
+
+    <div class="row" style="margin-top: 2em;" id='CAP'>
+<br>
+<br>
+<br>
+      <div class="large-12 columns">
+        <h1><strong>Caption Positioning</strong></h1>
+      </div>
+      <div class="large-4 columns">
+        <h3><strong>How it works</strong></h3>
+        <p>By applying Saliency Object and Saliency Map model, we can generate a Hybrid Saliency Map</p>
+        <p>The hybrid saliency map served as a "foreground-background map with attention"</p>
+        <p>A neural network called CapNet will take the saliency map as input and generate position score</p>
+        <p>Positions with top-3 scores will be recommended to user</p>
+      </div>
+      <div class="large-8 columns">
+        <div>
+          <img src="img_Caption/HowItWorks.png" />
+        </div>
+      </div>
+    </div>
+    </container>
+
+
+    <div class="row" style="margin-top: 2em;" id='CTE'>
+<br>
+<br>
+<br>
+      <div class="large-12 columns">
+        <h1><strong>Contrast Enhancement</strong></h1>
+      </div>
+        <div class="large-4 columns">
+          <h3><strong>Demonstration</strong></h3>
+          <p>By applying neural networks, we can perform <strong>Contrast Enhancement</strong> function on client's image.</p>
+        </div>
+
+        <div class="large-8 columns">
+          <div class="twentytwenty-container">
+            <img src="img_CTE/output.jpg" />
+            <img src="img_CTE/image.jpg" />
+          </div>
+        </div>
+    </div>
+
+
+
+<br>
+<br>
+<br>
+   <footer class="footer">
+    <nav class="navbar navbar-dark navbar-expand-sm">
+        <div class="container">
+           <div class="row justify-content-center">             
+                <div class="navbar-nav col-auto">
+                    <a class="nav-link" href='#BGRemoval'>BackTop</a>
+                </div>
+           </div>          
+        </div>
+    </nav>
+    </footer>
+    <script
+  src="https://code.jquery.com/jquery-3.2.1.js"
+  integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+  crossorigin="anonymous"></script>
+    <script src="js/jquery.event.move.js"></script>
+    <script src="js/jquery.twentytwenty.js"></script>
+    <script>
+    $(function(){
+      $(".twentytwenty-container[data-orientation!='vertical']").twentytwenty({default_offset_pct: 0.7});
+      $(".twentytwenty-container[data-orientation='vertical']").twentytwenty({default_offset_pct: 0.3, orientation: 'vertical'});
+    });
+    </script>
+  </body>
+</html>
