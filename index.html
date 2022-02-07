@@ -12,7 +12,7 @@
 		<link rel="stylesheet" href="assets/css/main.css" />
 	</head>
 	<body class="is-preload">
-
+		<style>#more {display: none;}</style>>
 		<!-- Wrapper -->
 			<div id="wrapper">
 
@@ -45,6 +45,43 @@
 										<img src="images/pic16.jpg", alt="" />
 									</span>
 								</section>
+
+
+						    <!-- Featured -->
+						    <section id="banner">
+									<div class="content" >
+										<header>
+											<h2>Publications</h2>
+											<h3>A Deep-Learning-based System for Indoor Active Cleaning</h3>
+											<p>IROS 2022 <a href="https://gaussianopensource.github.io/" target="_blank">[Company Page]</a>
+												<a href="https://github.com/BarCodeReader/MySHOWCASE/blob/master/iros_2022.pdf" target="_blank">[PDF]</a>
+												<a href="https://github.com/gaussianopensource/dl_active_cleaning" target="_blank">[Github]</a></p>
+
+										</header>
+										<p style="text-align:justify;">Cleaning public areas like commercial complexes is challenging due to their sophisticated surroundings and the vast kinds of real-life dirt. Robots are required to distinguish dirts and apply corresponding cleaning strategies. In this work, we proposed an active-cleaning framework by utilizing deep-learning methods<span id="dots_iros">...</span><span id="more_iros"> for both solid wastes detection and liquid stains segmentation. Our system consists of 4 components: a Perception module integrated with deep-learning models, a Post-processing module for projection, a Tracking module for map localization, and a Planning and Control module for cleaning strategies. Compared with classic approaches, our vision-based system significantly improves cleaning efficiency. Besides, we released the largest real-world indoor hybrid dirt cleaning dataset (HD10K) containing 10K labeled images, together with a track-level evaluation metric for better cleaning performance measurement. The proposed deep-learning based system is verified with extensive experiments on our dataset, and deployed to Gaussian Robotics's robots operating globally.</p>
+										<button onclick="myFunction_iros()" id="myBtn_iros">Read more</button>
+									</div>
+									<span class="image object">
+										<iframe width="560" height="315" src="https://www.youtube.com/embed/BrBY_WgIg1k" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+									</span>
+								</section>
+						    <section id="banner">
+									<div class="content" >
+										<header>
+											<h3>Recursive Contour-Saliency Blending Network for Accurate Salient Object Detection</h3>
+											<p>WACV 2022 <a href="https://openaccess.thecvf.com/content/WACV2022/html/Ke_Recursive_Contour-Saliency_Blending_Network_for_Accurate_Salient_Object_Detection_WACV_2022_paper.html" target="_blank">[CvF]</a><a href="https://openaccess.thecvf.com/content/WACV2022/papers/Ke_Recursive_Contour-Saliency_Blending_Network_for_Accurate_Salient_Object_Detection_WACV_2022_paper.pdf" target="_blank">[PDF]</a><a href="https://openaccess.thecvf.com/content/WACV2022/supplemental/Ke_Recursive_Contour-Saliency_Blending_WACV_2022_supplemental.pdf" target="_blank">[SUPP]</a><a href="https://github.com/BarCodeReader/RCSB-PyTorch" target="_blank">[Github]</a></p>
+
+										</header>
+										<p style="text-align:justify;">Contour information plays a vital role in salient object detection. However, excessive false positives remain in predictions from existing contour-based models due to insufficient contour-saliency fusion. In this work, we designed a network for better edge quality in salient<span id="dots_wacv">...</span><span id="more_wacv"> object detection. We proposed a contour-saliency blending module to exchange information between contour and saliency. We adopted recursive CNN to increase contour-saliency fusion while keeping the total trainable parameters the same. Furthermore, we designed a stage-wise feature extraction module to help the model pick up the most helpful features from previous intermediate saliency predictions. Besides, we proposed two new loss functions, namely Dual Confinement Loss and Confidence Loss, for our model to generate better boundary predictions. Evaluation results on five common benchmark datasets reveal that our model achieves competitive state-of-the-art performance.</p>
+										<button onclick="myFunction_wacv()" id="myBtn_wacv">Read more</button>
+
+									</div>
+									<span class="image object">
+										<iframe width="560" height="315" src="https://www.youtube.com/embed/U0umlqOY6Zg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+									</span>
+								</section>
+
+						    
 
 							<!-- Section -->
 								<section>
@@ -158,6 +195,39 @@
 			<script src="assets/js/breakpoints.min.js"></script>
 			<script src="assets/js/util.js"></script>
 			<script src="assets/js/main.js"></script>
+			<script>
+			function myFunction_wacv() {
+			var dots = document.getElementById("dots_wacv");
+			var moreText = document.getElementById("more_wacv");
+			var btnText = document.getElementById("myBtn_wacv");
 
+			if (dots.style.display === "none") {
+			dots.style.display = "inline";
+			btnText.innerHTML = "Read more";
+			moreText.style.display = "none";
+			} else {
+			dots.style.display = "none";
+			btnText.innerHTML = "Read less";
+			moreText.style.display = "inline";
+			}
+			}
+			</script>
+			<script>
+			function myFunction_iros() {
+			var dots = document.getElementById("dots_iros");
+			var moreText = document.getElementById("more_iros");
+			var btnText = document.getElementById("myBtn_iros");
+
+			if (dots.style.display === "none") {
+			dots.style.display = "inline";
+			btnText.innerHTML = "Read more";
+			moreText.style.display = "none";
+			} else {
+			dots.style.display = "none";
+			btnText.innerHTML = "Read less";
+			moreText.style.display = "inline";
+			}
+			}
+			</script>
 	</body>
 </html>
