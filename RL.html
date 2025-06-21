@@ -1,0 +1,195 @@
+<!DOCTYPE HTML>
+<!--
+	Editorial by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
+	<head>
+		<title>MySHOWCASE</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Main -->
+					<div id="main">
+						<div class="inner">
+
+							<!-- Header -->
+								<header id="header">
+									<a href="index.html" class="logo">Hi, I'm Yi Ke, this is my <strong>SHOWCASE</strong></a>
+									<ul class="icons">
+										<li><a target="_blank" rel="noopener noreferrer" href="https://www.linkedin.com/in/yunyike/" class="fab fa-linkedin-in"><span class="label"></span></a></li>
+										<li><a target="_blank" rel="noopener noreferrer" href="https://github.com/BarCodeReader" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
+									</ul>
+								</header>
+
+							<!-- Content -->
+								<section>
+									<header class="main">
+										<h1>🦖Meet T-REX: The Agent That Thinks Before It Moderates</h1>
+										<h2>--and T-REX means Tiered-Risk Exposure eXpert</h2>
+									</header>
+									<div class="quote">
+									  "Most models answer <strong>what</strong> to moderate. T-REX learns <strong>when</strong> and <strong>how</strong>. That makes all the difference."
+									</div>
+								  
+									<h2>Why We Built It</h2>
+									<p>Traditional video moderation pipelines are effective but fragmented. They react to violations but don’t plan ahead. We needed an agent that could strategically decide <em>when</em> to recall a video based on its risk level and view growth potential.</p>
+								  
+									<h2>The Agent's Job</h2>
+									<ul>
+									  <li>Recall <strong>high-risk</strong> videos <em>as early as possible</em></li>
+									  <li>Delay recall of <strong>low-risk</strong> videos to reduce reviewer burden</li>
+									  <li>Balance exposure vs. efficiency via trial-and-error learning</li>
+									</ul>
+								  
+									<h2>Technical Framing</h2>
+									<p>We model moderation timing as a sequential decision problem. T-REX doesn't need to predict exact VV (view volume) growth, only <strong>when</strong> to act to maximize expected return.</p>
+									
+									<h3>Environment</h3>
+									<p>The role of the environment is to provide feedback (rewards) based on the agent’s actions. Specifically, it simulates VV (view volume) sampling and anchoring for each video based on a predefined VV growth trend. Combined with the agent’s predicted recall VV, it calculates the duration of risk exposure and returns a reward accordingly. We simulate the 3-day VV growth trend using three Beta distributions and one Uniform distribution, as shown in the figure below. By overlaying these distributions, we sample and anchor VV values for each video to complete the simulation environment. In future iterations, if actual VV distribution data becomes available, it would be preferable to replace simulated trends with real-world VV data.</p>
+									
+									<h3>Action Space</h3>
+									<p>Given the features of a video, the agent needs to predict an appropriate action—such as recalling the video immediately at 0 VV, or delaying recall until it reaches 200 VV, and so on. We define a discrete action space consisting of 6 options: recall at 0 VV, 200 VV, 400 VV, 600 VV, 800 VV, and 1000 VV.</p>
+								  
+									<h3>Reward Function</h3>
+									<pre><code>
+# Risk Penalty (emperical formula):
+	R_risk = (3 - risk_level) * recall_days / 8
+	# Example: For a high-risk video (risk level = 0) recalled at 200 VV, if its VV growth rate is 50 VV/day, it will be recalled in 4 days. Then, R = (3-0)*4/8 = 1.5. For a non-violating video (risk level = 3), the penalty is zero.
+								  
+# Review Reward (emperical formula):
+	R_human = 0.5 + (0.3 * recall_days)
+								  
+# Final Reward:
+	R_total = 0.1 * R_human - 0.9 * R_risk
+									</code></pre>
+									<p>Here, λ1 and λ2 are hyperparameters that balance risk control and review efficiency. For simplicity, we set λ1+λ2=1.</p>
+									<p>Design motivation: The later a video is recalled, the lower the human review cost—but if it's a high-risk case, delayed recall leads to greater risk exposure and higher penalties. The optimal strategy is to recall high-risk content early and delay low-risk content, and the agent must learn to identify risk and strike this balance through continuous interaction with the environment.</p>
+								  
+									<h2>Training Procedure</h2>
+									<p>The overall architecture of our model is shown below. It adopts model embeddings and discrete features as the input. We employ AutoDisNN as our encoder due to its great ability of encoding discrete features. We apply meta embedding to reduce model dimension and Mixture of Experts for final prediction heads.</p>
+									<img src="RL_mod/model.png" height="800"/>
+									<p>Training steps can be listed as below:</p>
+									<ol>
+									  <li>Supervised training on video labels (risk: yes/no), this is a just a simple binary classification.</li>
+									  <li>Simulate view growth using beta distributions. This step, we need to simulate the online video VV growth and bind them to each video.</li>
+									  <li>Train policy via PPO (Proximal Policy Optimization). During this tuning, the model will learn how to sort low and high risks.</li>
+									</ol>
+
+									<h3>Supervised Learning</h3>
+									<p>Supervised learning is quite straight forward, we just need to train our model under a binary classification task.</p>
+									
+									<h3>Simulation</h3>
+									<p>Because our task is to recall high risks ASAP and release low risk tasks, we need to know how much VV a video will gain if it get released online. In this case, we need to simulate each video's VV based on historical data.</p>
+									<p>We fetched the online VV distribution for videos, and applied 3 <strong>Beta Distritbuion</strong> to simulate the real distribution. After this step, we can bind the simulated VV to the videos in hand, and assume they will generate this much VV if they get released online.</p>
+									<div style="display: flex; gap: 1rem;">
+										<img src="RL_mod/vv_after_3_days.png" alt="Image 2" style="width: 50%;" />
+										<img src="RL_mod/beta.png" alt="Image 1" style="width: 50%;" />
+									</div>
+
+									<h3>Reinforcement Learning</h3>
+									<p>We adopt PPO to train our agent. The overall training architecture is shown below:</p>
+									<img src="RL_mod/system.png" height="400"/>
+									
+									<h2>Results</h2>
+									<h3>Offline:</h3>
+									<p>The following illustrates the policy learned by the model. After reinforcement learning training, the model is able to recall 80% of 0- and 1-point (high-risk) cases on T0, while achieving a 40–50% reduction in T0 review volume. Considering the gradual return of videos over time, the T1+ review reduction effect is around 10–20%.</p>
+									<div style="display: flex; gap: 1rem;">
+										<img src="RL_mod/rl_action_dist.png" alt="Image 1" style="width: 50%;" />
+										<img src="RL_mod/rl_action_dist.png" alt="Image 2" style="width: 50%;" />
+									</div>
+
+									<p>The following shows a comparison of recall behavior when there is no learned policy (recall at 400 VV). As observed, when the model has not learned a policy and relies solely on threshold or specified VV for release, the distribution of risk recall volume is proportional to the daily recall volume (i.e., the risk concentration is uniform), and the daily review volume does not exhibit a clear T0 concentration. In comparison with the policy-learned case above, this further demonstrates that the reinforcement learning–optimized model has learned to balance risk control and review efficiency.</p>
+									<div style="display: flex; gap: 1rem;">
+										<img src="RL_mod/nature_action_dist.png" alt="Image 1" style="width: 50%;" />
+										<img src="RL_mod/nature_risk_dist.png" alt="Image 2" style="width: 50%;" />
+									</div>
+								  
+									<h3>Online A/B Testing:</h3>
+									<p>Between May 21 and May 22, a total of 800 model-hit cases were released. On May 25, the videos' cumulative view counts (VV) were collected and the cases were submitted to the review queue to obtain human labels.
+										In the chart below, cases with recall durations of 14 days or more are grouped under “14 days.” With the policy in place, risk concentration exhibited strong T0 clustering:
+										At T0 recall, the proportions of risk scores 0, 1, and 2 were 85%, 80%, and 70% respectively.</p>
+									<div style="display: flex; gap: 1rem;">
+										<img src="RL_mod/actual_rl_action_dist.png" alt="Image 1" style="width: 50%;" />
+										<img src="RL_mod/actual_risk_dist.png" alt="Image 2" style="width: 50%;" />
+									</div>
+
+									<p>In the chart below, cases with recall durations of 14 days or more are grouped under “14 days.” Under natural inflow, the risk concentration did not exhibit strong clustering, which is consistent with previous estimation experience.</p>
+									<div style="display: flex; gap: 1rem;">
+										<img src="RL_mod/actual_nature_action_dist.png" alt="Image 1" style="width: 50%;" />
+										<img src="RL_mod/actual_natual_risk_dist.png" alt="Image 2" style="width: 50%;" />
+									</div>
+
+									<h3>"T-REX doesn't just react to signals. It strategizes. And it wins."</h3>
+
+									<hr id="2e4c7c87-ddf8-439d-8347-ff68c9dc223a"/>
+									<p id="beaf9483-c613-4041-b3fd-41fe929afe82" class=""></p>
+								</section>
+
+						</div>
+					</div>
+
+				<!-- Sidebar -->
+					<div id="sidebar">
+						<div class="inner">
+
+							<!-- Search -->
+								<section id="search" class="alt">
+									<form method="post" action="#">
+										<input type="text" name="query" id="query" placeholder="Search" />
+									</form>
+								</section>
+
+							<!-- Menu -->
+								<nav id="menu">
+									<header class="major">
+										<a href="index.html"><h2>MySHOWCASE</h2></a>
+									</header>
+									<ul>
+										<li>
+											<span class="opener">Projects</span>
+											<ul>
+												<li><a href="CapNet.html">CapNet</a></li>
+												<li><a href="AnimRecom.html">Animation Recommendation</a></li>
+												<li><a href="AI_toolkit.html">AI Toolkit</a></li>
+												<li><a href="DeepRacer.html">Autonomous AI</a></li>
+												<li><a href="IOT.html">IOT under COVID-19</a></li>
+											</ul>
+										</li>
+									</ul>
+								</nav>
+							<!-- Section -->
+								<section>
+									<header class="major">
+										<h2>Get in touch</h2>
+									</header>
+									<ul class="contact">
+										<li class="icon solid fa-envelope"><a href="#">yunyikeyyk@gmail.com</a></li>
+										<li class="icon solid fa-phone">+65 8818 5997</li>
+										<li><a target="_blank" rel="noopener noreferrer" href="https://www.linkedin.com/in/yunyike/" class="fab fa-linkedin-in"><span class="label"></span></a>&nbsp&nbsp
+											<a target="_blank" rel="noopener noreferrer" href="https://github.com/BarCodeReader" class="icon brands fa-github"><span class="label">GitHub</span></a>
+										</li>
+									</ul>
+								</section>
+
+						</div>
+					</div>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>
