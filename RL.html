@@ -75,7 +75,7 @@
 								  
 									<h2>Training Procedure</h2>
 									<p>The overall architecture of our model is shown below. It adopts model embeddings and discrete features as the input. We employ AutoDisNN as our encoder due to its great ability of encoding discrete features. We apply meta embedding to reduce model dimension and Mixture of Experts for final prediction heads.</p>
-									<img src="RL_mod/model.png" height="800"/>
+									<img src="RL_mod/model.png" height="500"/>
 									<p>Training steps can be listed as below:</p>
 									<ol>
 									  <li>Supervised training on video labels (risk: yes/no), this is a just a simple binary classification.</li>
@@ -90,26 +90,26 @@
 									<p>Because our task is to recall high risks ASAP and release low risk tasks, we need to know how much VV a video will gain if it get released online. In this case, we need to simulate each video's VV based on historical data.</p>
 									<p>We fetched the online VV distribution for videos, and applied 3 <strong>Beta Distritbuion</strong> to simulate the real distribution. After this step, we can bind the simulated VV to the videos in hand, and assume they will generate this much VV if they get released online.</p>
 									<div style="display: flex; gap: 1rem;">
-										<img src="RL_mod/vv_after_3_days.png" alt="Image 2" style="width: 50%;" />
-										<img src="RL_mod/beta.png" alt="Image 1" style="width: 50%;" />
+										<img src="RL_mod/vv_after_3_days.png" alt="Image 2" style="width: 30%;" />
+										<img src="RL_mod/beta.png" alt="Image 1" style="width: 30%;" />
 									</div>
 
 									<h3>Reinforcement Learning</h3>
 									<p>We adopt PPO to train our agent. The overall training architecture is shown below:</p>
-									<img src="RL_mod/system.png" height="400"/>
+									<img src="RL_mod/system.png" height="250"/>
 									
 									<h2>Results</h2>
 									<h3>Offline:</h3>
-									<p>The following illustrates the policy learned by the model. After reinforcement learning training, the model is able to recall 80% of 0- and 1-point (high-risk) cases on T0, while achieving a 40–50% reduction in T0 review volume. Considering the gradual return of videos over time, the T1+ review reduction effect is around 10–20%.</p>
+									<p>The following illustrates the policy learned by the model. After reinforcement learning training, the model is able to recall 80% of 0- and 1-point (high-risk) cases on T0, while achieving a 40–30% reduction in T0 review volume. Considering the gradual return of videos over time, the T1+ review reduction effect is around 10–20%.</p>
 									<div style="display: flex; gap: 1rem;">
-										<img src="RL_mod/rl_action_dist.png" alt="Image 1" style="width: 50%;" />
-										<img src="RL_mod/rl_action_dist.png" alt="Image 2" style="width: 50%;" />
+										<img src="RL_mod/rl_action_dist.png" alt="Image 1" style="width: 30%;" />
+										<img src="RL_mod/rl_action_dist.png" alt="Image 2" style="width: 30%;" />
 									</div>
 
 									<p>The following shows a comparison of recall behavior when there is no learned policy (recall at 400 VV). As observed, when the model has not learned a policy and relies solely on threshold or specified VV for release, the distribution of risk recall volume is proportional to the daily recall volume (i.e., the risk concentration is uniform), and the daily review volume does not exhibit a clear T0 concentration. In comparison with the policy-learned case above, this further demonstrates that the reinforcement learning–optimized model has learned to balance risk control and review efficiency.</p>
 									<div style="display: flex; gap: 1rem;">
-										<img src="RL_mod/nature_action_dist.png" alt="Image 1" style="width: 50%;" />
-										<img src="RL_mod/nature_risk_dist.png" alt="Image 2" style="width: 50%;" />
+										<img src="RL_mod/nature_action_dist.png" alt="Image 1" style="width: 30%;" />
+										<img src="RL_mod/nature_risk_dist.png" alt="Image 2" style="width: 30%;" />
 									</div>
 								  
 									<h3>Online A/B Testing:</h3>
@@ -117,14 +117,14 @@
 										In the chart below, cases with recall durations of 14 days or more are grouped under “14 days.” With the policy in place, risk concentration exhibited strong T0 clustering:
 										At T0 recall, the proportions of risk scores 0, 1, and 2 were 85%, 80%, and 70% respectively.</p>
 									<div style="display: flex; gap: 1rem;">
-										<img src="RL_mod/actual_rl_action_dist.png" alt="Image 1" style="width: 50%;" />
-										<img src="RL_mod/actual_risk_dist.png" alt="Image 2" style="width: 50%;" />
+										<img src="RL_mod/actual_rl_action_dist.png" alt="Image 1" style="width: 30%;" />
+										<img src="RL_mod/actual_risk_dist.png" alt="Image 2" style="width: 30%;" />
 									</div>
 
 									<p>In the chart below, cases with recall durations of 14 days or more are grouped under “14 days.” Under natural inflow, the risk concentration did not exhibit strong clustering, which is consistent with previous estimation experience.</p>
 									<div style="display: flex; gap: 1rem;">
-										<img src="RL_mod/actual_nature_action_dist.png" alt="Image 1" style="width: 50%;" />
-										<img src="RL_mod/actual_natual_risk_dist.png" alt="Image 2" style="width: 50%;" />
+										<img src="RL_mod/actual_nature_action_dist.png" alt="Image 1" style="width: 30%;" />
+										<img src="RL_mod/actual_natual_risk_dist.png" alt="Image 2" style="width: 30%;" />
 									</div>
 
 									<h3>"T-REX doesn't just react to signals. It strategizes. And it wins."</h3>
